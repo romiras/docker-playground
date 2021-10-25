@@ -1,0 +1,12 @@
+version: "3.2"
+
+services:
+
+  redis:
+    image: redis:${REDIS_VERSION:-6.0-alpine}
+
+  redis_data:
+    build:
+      context: ./docker/redis
+    depends_on:
+      - redis
