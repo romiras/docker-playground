@@ -7,8 +7,8 @@ services:
 
   redis_data:
     build:
-      context: ./docker/redis
+      context: .
     depends_on:
       - redis
     volumes:
-      - "./docker/redis/data/dump.resp:/tmp/dump.resp"
+      - "./data/dump.resp:/tmp/dump.resp"
