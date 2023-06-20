@@ -1,0 +1,37 @@
+version: "3.2"
+
+services:
+
+  app:
+    build:
+      context: .
+    depends_on:
+      - redis
+      - db
+    volumes:
+      - /etc/ssl/certs/ssl-cert-snakeoil.pem:/etc/ssl/certs/ssl-cert-snakeoil.pem:ro
+      - /etc/ssl/private/ssl-cert-snakeoil.key:/etc/ssl/private/ssl-cert-snakeoil.key:ro
+
+  db:
+    image: mariadb:10.3.36-focal
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
+      MARIADB_AUTO_UPGRADE: "yes"
+      # MYSQL_ROOT_HOST: %
+    ports:
+      - "${HOST_DB_PORT:-3306}:3306"
+    volumes:
+      - "db:/var/lib/mysql"
+
+  redis:
+    image: redis:${REDIS_VERSION:-6.0-alpine}
+    restart: unless-stopped
+    ports:
+      - "${HOST_REDIS_PORT:-6379}:6379"
+    volumes:
+      - "redis:/data"
+
+volumes:
+  db:
+  redis:
